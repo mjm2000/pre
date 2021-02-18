@@ -1,9 +1,15 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define READFILE "r"
-
+#define C 1000 
+#define R 100
+#define S 100
 void read_csv(char csv_name[]){
 	FILE *csv = fopen(csv_name, READFILE ); 
-	char buff[800][100][100];
+//	char buff[800][100][100];
+
+	printf("yo\n");
+	char *buff = (char*)malloc(C * R * S * sizeof(char));
 	char value = ' ';
 	//i is row, j is collomn, k is string pos
 	int i,j,k =0 ;
@@ -11,7 +17,12 @@ void read_csv(char csv_name[]){
 		value = fgetc(csv);
 		if (value == ','){j++; k=0;}			
 		else if ( value == '\n' ) {i++; j=0;}
-		else {buff[i][j][k] = value; k++;}
+		else {
+			int index= (i*R*S) + (j*R) + k;
+			*(buff + index) = value; 
+			k++;
+		}
+
 		printf("i:%i, j:%i, k:%i \n",i,j,k);
 	}
 	for (int incr=0; incr < i; incr++ ) {
@@ -19,6 +30,7 @@ void read_csv(char csv_name[]){
 		//	printf("%s yo\n",buff[i][j]);
 		}
 	}
+//	return buff;
 }
 
 int main(int argc, char *argv[]){
