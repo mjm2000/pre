@@ -9,6 +9,23 @@ char *get_index(int i, int j,char *buff){
 	return (buff + index);
 }
 
+
+int fetch_max(char* field){
+	// We take the field string that was inputted and then find the value that was highest
+	
+	// Int that will be used to store the highest value 
+	int highest = 0 ;
+	// If there is no numeric data in the indicated field in any of the data records the program exits with error code EXIT_FAILURE.
+	if(!has_numeric_data(field)){
+		return 0;
+	}
+
+	return highest;
+
+}
+
+
+
 char *read_csv(char csv_name[]){
 	FILE *csv = fopen(csv_name, READFILE ); 
 //	char buff[800][100][100];
