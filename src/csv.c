@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define READFILE "r"
-#define C 1000 
-#define R 100
-#define S 100
+
+#define C 1000 //column
+#define R 100  //row
+#define S 100  //string_len
+
+//i is row, j is collomn, k is string pos
+static int i,j,k = 0;
+
 char *get_index(int i, int j,char *buff){
 	int index= (i*R*S) + (j*R);
 	return (buff + index);
@@ -28,13 +34,9 @@ int fetch_max(char* field){
 
 char *read_csv(char csv_name[]){
 	FILE *csv = fopen(csv_name, READFILE ); 
-//	char buff[800][100][100];
 
-	printf("yo\n");
 	char *buff = (char*)malloc(C * R * S * sizeof(char));
 	char value = ' ';
-	//i is row, j is collomn, k is string pos
-	int i,j,k =0 ;
 	while (value != EOF ) {
 		value = fgetc(csv);
 		if (value == ','){j++; k=0;}			
@@ -56,15 +58,53 @@ char *read_csv(char csv_name[]){
 }
 
 int main(int argc, char *argv[]){
-
-	
-	for (int i = 0; i < argc-1; i++ ){
-		char *arg = argv[i];
-
-	}  
 	char *file = read_csv(argv[argc-1]);
 	file = get_index(10,10,file);
-	printf("string:%s\n", file);
+	for (int i = 0; i < argc-1; i++ ){
+		if (strcmp("-f",argv[i])){
+				
+		}
+		else if(strcmp("-r",argv[i])){
+			
+		} 
+		else if(strcmp("-h",argv[i])){
+			
+		}
+		else if(strcmp("-max",argv[i])){
+			if (i++ < argc-1 ){
+			//do function
+			}			
+			else {
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if(strcmp("-min",argv[i])){
+			if (i++ < argc-1 ){
+			//do function
+			}			
+			else {
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if(strcmp("-mean",argv[i])){
+			if (i++ < argc-1 ){
+			//do function
+			}			
+			else {
+				exit(EXIT_FAILURE);
+			}
+		}		
+		else if(strcmp("-records",argv[i])){
+			i++;
+			if (i++ < argc-1 ){
+			//do function
+			}			
+			else {
+				exit(EXIT_FAILURE);
+			}
+		}
+		char *arg = argv[i];
+	}  
 
 //	FILE *csv = fopen(argv[argc-1], READFILE ); 
 //	char buff[800][100][100];
