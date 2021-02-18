@@ -4,7 +4,12 @@
 #define C 1000 
 #define R 100
 #define S 100
-void read_csv(char csv_name[]){
+char *get_index(int i, int j,char *buff){
+	int index= (i*R*S) + (j*R);
+	return (buff + index);
+}
+
+char *read_csv(char csv_name[]){
 	FILE *csv = fopen(csv_name, READFILE ); 
 //	char buff[800][100][100];
 
@@ -23,14 +28,14 @@ void read_csv(char csv_name[]){
 			k++;
 		}
 
-		printf("i:%i, j:%i, k:%i \n",i,j,k);
+	//	printf("i:%i, j:%i, k:%i \n",i,j,k);
 	}
 	for (int incr=0; incr < i; incr++ ) {
 		for (int jincr; jincr < j; jincr++){
 		//	printf("%s yo\n",buff[i][j]);
 		}
 	}
-//	return buff;
+	return buff;
 }
 
 int main(int argc, char *argv[]){
@@ -40,7 +45,10 @@ int main(int argc, char *argv[]){
 		char *arg = argv[i];
 
 	}  
-	read_csv(argv[argc-1]);
+	char *file = read_csv(argv[argc-1]);
+	file = get_index(10,10,file);
+	printf("string:%s\n", file);
+
 //	FILE *csv = fopen(argv[argc-1], READFILE ); 
 //	char buff[800][100][100];
 //	char value = fgetc(csv);
