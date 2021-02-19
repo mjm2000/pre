@@ -1,6 +1,8 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #define READFILE "r"
 
 #define C 1000 //column
@@ -14,6 +16,22 @@ char *get_index(int i, int j,char *buff){
 	int index= (i*R*S) + (j*R);
 	return (buff + index);
 }
+
+
+int fetch_num(char* field, int i , int j ){
+	// We take the field string that was inputted and then find the value that was highest
+	// Int that will be used to store the highest value 
+	int current = field[i][j] ;
+	// If there is no numeric data in the indicated field in any of the data records the program exits with error code EXIT_FAILURE.
+	if(!isdigit(current)){
+		exit(EXIT_FAILURE);
+	}
+	else{
+		return atoi(field[i][j]);
+	}
+}
+
+
 
 char *read_csv(char csv_name[]){
 	FILE *csv = fopen(csv_name, READFILE ); 
@@ -54,28 +72,40 @@ int main(int argc, char *argv[]){
 			
 		}
 		else if(strcmp("-max",argv[i])){
+			int highest = INT_MIN ;
 			if (i++ < argc-1 ){
 			//do function
-			}			
-			else {
-				exit(EXIT_FAILURE);
+			for(int j = 0 ; j != EOF ; j++){
+				if(fetch_num(file,i,j) > highest){
+					highest = fetch_num(file,i,j);
+				}
 			}
+			}
+			return highest;
 		}
 		else if(strcmp("-min",argv[i])){
+			int lowest = INT_MAX ;
 			if (i++ < argc-1 ){
 			//do function
-			}			
-			else {
-				exit(EXIT_FAILURE);
+			for(int j = 0 ; j != EOF ; j++){
+				if(fetch_num(file,i,j) <  lowest){
+					lowest = fetch_num(file,i,j);
+				}
 			}
+			}
+			return lowest;
 		}
 		else if(strcmp("-mean",argv[i])){
+			int sum = 0 ;
+			int nums = 1 ;
 			if (i++ < argc-1 ){
 			//do function
-			}			
-			else {
-				exit(EXIT_FAILURE);
+			for(int j = 0 ; j != EOF ; j++){
+				sum += fetch_num(file,i,j);
+				nums ++ ;
+				}
 			}
+			return sum / nums;
 		}		
 		else if(strcmp("-records",argv[i])){
 			i++;
