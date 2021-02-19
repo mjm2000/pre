@@ -13,16 +13,19 @@
 //i is row, j is collomn, k is string pos
 static int g_i,g_j,g_k = 0;
 
-char *get_index(int i, int j,char *buff){
+static char *file;
+
+char *get_index(int i, int j){
 	int index= (i*R*S) + (j*R);
-	return (buff + index);
+	return (file + index);
 }
 
-
-int fetch_num(char *field, int i , int j ){
 	// We take the field string that was inputted and then find the value that was highest
 	// Int that will be used to store the highest value 
-	int current = *get_index(i,j,field);
+	int fetch_num(int i , int j ){
+	// We take the field string that was inputted and then find the value that was highest
+	// Int that will be used to store the highest value 
+	char* current = get_index(i,j) ;
 	// If there is no numeric data in the indicated field in any of the data records the program exits with error code EXIT_FAILURE.
 	if(!isdigit(current)){
 		exit(EXIT_FAILURE);
@@ -30,7 +33,7 @@ int fetch_num(char *field, int i , int j ){
 	else{
 	//	return atoi(field[i][j]);
 		
-		return -1;
+		return atoi(current);
 	}
 }
 
@@ -53,16 +56,16 @@ char *read_csv(char csv_name[]){
 	}
 	return buff;
 }
-void headers(char *matrix){
+void headers(){
 	for (int i = 1;i <= g_i; i++){
 		for (int j = 0;j <= g_i; j++){
-			*get_index(i-1,j,matrix) = *get_index(i,j,matrix);
+			*get_index(i-1,j) = *get_index(i,j);
 		}
 	}
 }
 
 int main(int argc, char *argv[]){
-	char *file = read_csv(argv[argc-1]);
+	file = read_csv(argv[argc-1]);
 	
 	//We are checking each argument and applying it's function on the array file
 	// Important: Use the function get_index(i,j,pointer) in order to access the pointer to entry 
@@ -86,8 +89,8 @@ int main(int argc, char *argv[]){
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
-				if(fetch_num(file,i,j) > highest){
-					highest = fetch_num(file,i,j);
+				if(fetch_num(i,j) > highest){
+					highest = fetch_num(i,j);
 				}
 			}
 			}
@@ -98,8 +101,8 @@ int main(int argc, char *argv[]){
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
-				if(fetch_num(file,i,j) <  lowest){
-					lowest = fetch_num(file,i,j);
+				if(fetch_num(i,j) <  lowest){
+					lowest = fetch_num(i,j);
 				}
 			}
 			}
@@ -111,7 +114,7 @@ int main(int argc, char *argv[]){
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
-				sum += fetch_num(file,i,j);
+				sum += fetch_num(i,j);
 				nums ++ ;
 				}
 			}
