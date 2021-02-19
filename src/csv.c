@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #define READFILE "r"
 
 #define C 1000 //column
@@ -71,7 +72,7 @@ int main(int argc, char *argv[]){
 			
 		}
 		else if(strcmp("-max",argv[i])){
-			int highest = 0 ;
+			int highest = INT_MIN ;
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
@@ -83,20 +84,28 @@ int main(int argc, char *argv[]){
 			return highest;
 		}
 		else if(strcmp("-min",argv[i])){
+			int lowest = INT_MAX ;
 			if (i++ < argc-1 ){
 			//do function
-			}			
-			else {
-				exit(EXIT_FAILURE);
+			for(int j = 0 ; j != EOF ; j++){
+				if(fetch_num(file,i,j) <  lowest){
+					lowest = fetch_num(file,i,j);
+				}
 			}
+			}
+			return lowest;
 		}
 		else if(strcmp("-mean",argv[i])){
+			int sum = 0 ;
+			int nums = 1 ;
 			if (i++ < argc-1 ){
 			//do function
-			}			
-			else {
-				exit(EXIT_FAILURE);
+			for(int j = 0 ; j != EOF ; j++){
+				sum += fetch_num(file,i,j);
+				nums ++ ;
+				}
 			}
+			return sum / nums;
 		}		
 		else if(strcmp("-records",argv[i])){
 			i++;
