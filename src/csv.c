@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "csv.h"
 #define READFILE "r"
 
 #define C 1000 //column
@@ -8,7 +9,7 @@
 #define S 100  //string_len
 
 //i is row, j is collomn, k is string pos
-static int i,j,k = 0;
+static int g_i,g_j,g_k = 0;
 
 char *get_index(int i, int j,char *buff){
 	int index= (i*R*S) + (j*R);
@@ -22,38 +23,43 @@ char *read_csv(char csv_name[]){
 	char value = ' ';
 	while (value != EOF ) {
 		value = fgetc(csv);
-		if (value == ','){j++; k=0;}			
-		else if ( value == '\n' ) {i++; j=0;}
+		if (value == ','){g_j++; g_k=0;}			
+		else if ( value == '\n' ) {g_i++; g_j=0;}
 		else {
-			int index= (i*R*S) + (j*R) + k;
+			int index= (g_i*R*S) + (g_j*R) + g_k;
 			*(buff + index) = value; 
-			k++;
-		}
-
-	//	printf("i:%i, j:%i, k:%i \n",i,j,k);
-	}
-	for (int incr=0; incr < i; incr++ ) {
-		for (int jincr; jincr < j; jincr++){
-		//	printf("%s yo\n",buff[i][j]);
+			g_k++;
 		}
 	}
 	return buff;
+}
+void headers(char *matrix){
+	for (int i = 1;i <= g_i; i++){
+		for (int j = 0;j <= g_i; j++){
+			*get_index(i-1,j,matrix) = *get_index(i,j,matrix);
+		}
+	}
 }
 
 int main(int argc, char *argv[]){
 	char *file = read_csv(argv[argc-1]);
 	file = get_index(10,10,file);
-	for (int i = 0; i < argc-1; i++ ){
-		if (strcmp("-f",argv[i])){
-				
+
+	for (int i = 1; i < argc-1; i++ ){
+		printf("%s:arg\n",argv[i]);
+		if (strcmp("-f",argv[i])==0){
+			printf("-f:%s\n",argv[i]);
+			//for (int field_j = 0; g_j >= field_j;field_j++){
+			//	printf("%s ",get_index(0,field_j,file) );			
+			//}	
 		}
-		else if(strcmp("-r",argv[i])){
-			
+		else if(strcmp("-r",argv[i])==0){
+			printf("%i-r ", g_i);
 		} 
-		else if(strcmp("-h",argv[i])){
-			
+		else if(strcmp("-h",argv[i])==0){
+			printf("%i :header\n", g_i);
 		}
-		else if(strcmp("-max",argv[i])){
+		else if(strcmp("-max",argv[i])==0){
 			if (i++ < argc-1 ){
 			//do function
 			}			
@@ -61,7 +67,7 @@ int main(int argc, char *argv[]){
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if(strcmp("-min",argv[i])){
+		else if(strcmp("-min",argv[i])==0){
 			if (i++ < argc-1 ){
 			//do function
 			}			
@@ -69,7 +75,7 @@ int main(int argc, char *argv[]){
 				exit(EXIT_FAILURE);
 			}
 		}
-		else if(strcmp("-mean",argv[i])){
+		else if(strcmp("-mean",argv[i])==0){
 			if (i++ < argc-1 ){
 			//do function
 			}			
@@ -77,7 +83,7 @@ int main(int argc, char *argv[]){
 				exit(EXIT_FAILURE);
 			}
 		}		
-		else if(strcmp("-records",argv[i])){
+		else if(strcmp("-records",argv[i])==0){
 			i++;
 			if (i++ < argc-1 ){
 			//do function
@@ -88,20 +94,6 @@ int main(int argc, char *argv[]){
 		}
 		char *arg = argv[i];
 	}  
-
-//	FILE *csv = fopen(argv[argc-1], READFILE ); 
-//	char buff[800][100][100];
-//	char value = fgetc(csv);
-//	//i is row, j is collom, k is string pos
-//	int i,j,k =0 ;
-//	while (value != EOF ) {
-//		value = fgetc(csv);
-//		printf("%c\n",value);
-//		if (value == ','){i++; k=0;}			
-//		else if ( value == '\n' ) {j++; i=0;}
-//		else buff[i][j][k] = value;
-//		k++;
-//	}
 	return 0;
 }
 
