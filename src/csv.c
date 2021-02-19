@@ -18,16 +18,16 @@ char *get_index(int i, int j,char *buff){
 }
 
 
-int fetch_num(char* field, int i , int j ){
+int fetch_num(int i , int j ){
 	// We take the field string that was inputted and then find the value that was highest
 	// Int that will be used to store the highest value 
-	int current = field[i][j] ;
+	char* current = get_index(i,j) ;
 	// If there is no numeric data in the indicated field in any of the data records the program exits with error code EXIT_FAILURE.
 	if(!isdigit(current)){
 		exit(EXIT_FAILURE);
 	}
 	else{
-		return atoi(field[i][j]);
+		return atoi(current);
 	}
 }
 
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
-				if(fetch_num(file,i,j) > highest){
+				if(fetch_num(i,j) > highest){
 					highest = fetch_num(file,i,j);
 				}
 			}
@@ -88,8 +88,8 @@ int main(int argc, char *argv[]){
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
-				if(fetch_num(file,i,j) <  lowest){
-					lowest = fetch_num(file,i,j);
+				if(fetch_num(i,j) <  lowest){
+					lowest = fetch_num(i,j);
 				}
 			}
 			}
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]){
 			if (i++ < argc-1 ){
 			//do function
 			for(int j = 0 ; j != EOF ; j++){
-				sum += fetch_num(file,i,j);
+				sum += fetch_num(i,j);
 				nums ++ ;
 				}
 			}
