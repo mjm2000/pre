@@ -48,9 +48,15 @@ char *read_csv(char csv_name[]){
 	char value = ' ';
 	while (value != EOF ) {
 		value = fgetc(csv);
-		if (value == ','){
-			int index= (g_i*R*S) + (g_j*R) + g_k + 1;
-			//*(buff + index) = '\0';
+		char *temp = buff+(g_i*R*S) + (g_j*R);
+
+		if ( value == '\n' ) {
+			if (g_i == 0) {header_size = g_j;}
+
+			*(buff+(g_i*R*S) + (g_j*R)+g_k-1) = '\0' ;
+			g_i++; g_j=0;g_k=0;
+		}
+		else if (value == ','){
 			g_j++; g_k=0; 
 		}			
 		else if ( value=='\"' ) {
@@ -62,13 +68,11 @@ char *read_csv(char csv_name[]){
 				g_k++;
 			}
 		}
-		else if ( value == '\n' ) {
-			if (g_i == 0) header_size = g_j;
-			g_i++; g_j=0;
-		}
 		else {
+			//printf("%s: %i\n",temp,g_j);
 			int index= (g_i*R*S) + (g_j*R) + g_k;
 			*(buff + index) = value; 
+
 			g_k++;
 		}
 	}
@@ -85,28 +89,30 @@ void headers(){
 
 void print_file(){
 	for (int i = 0; i < g_i;i++){
-
-		for (int j = 0;j < header_size;j++){
-
+		for (int j = 0;j <= header_size;j++){
 			printf("%s\n",get_index(i,j));	
 		}
 	}
 }
 void print_record(int i){
 	printf("%s",get_index(i,0));
-	for (int j = 1; j < header_size; j++){
+	for (int j = 1; j <= header_size; j++){
 		printf(",%s",get_index(i,j));
 	}
 }
+
 void get_reconds(char *field,char *value){
-	for (int j =0; j < header_size;j++){
-		//scans the first row for field
+//	print_file();
+	for (int j =0; j <= header_size;j++){
+
 		char *header = get_index(0,j);
-		if (strcmp(header,field)==0 ){
-	//		printf("header:%s,field:%s,value:%s\n",header,field,value);
-			printf("%s\n",get_index(1,j));
+		
+
+		if (strcmp(header,field)==0){
+
+		//	printf("header:%s,field:%s,value:%s\n",header,field,value);
+		//	printf("%s\n",get_index(1,j));
 			for (int i = 1; i<g_i; i++){
-//				printf("%s:%i\n",get_index(i,j),i);
 				if (strcmp(get_index(i,j),value) == 0){
 					print_record(i);	
 				}	
@@ -117,7 +123,7 @@ void get_reconds(char *field,char *value){
 
 int main(int argc, char *argv[]){
 	file = read_csv(argv[argc-1]);
-//	printf("%s\n",get_index(0,0));
+//	print_file();
 	//We are checking each argument and applying it's function on the array file
 	// Important: Use the function get_index(i,j) in order to access the pointer to entry 
 	// i(the first param) is the row number, j(the second param) is the column
@@ -176,7 +182,6 @@ int main(int argc, char *argv[]){
 				get_reconds(field,record);
 			}			
 			else {
-				printf("yo\n");	
 				exit(EXIT_FAILURE);
 			}
 		}

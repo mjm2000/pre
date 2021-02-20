@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-I
 
 all: csv  
-	./build/csv  file.csv 
+	./build/csv $(ARGS) file.csv 
 
 csv: csv.o
 	$(CC) -o build/csv build/csv.o
